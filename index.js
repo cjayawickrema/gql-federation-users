@@ -35,6 +35,7 @@ const typeDefs = gql`
 
     type Query {
         getUserDetails(email: String!): User
+        users: [User]
     }
 `;
 
@@ -43,6 +44,7 @@ const resolvers = {
         getUserDetails(_, { email }) {
             return userMockData.find(user => user.email === email)
         },
+        users: () => userMockData,
     },
     User: {
         library(user) {
@@ -63,9 +65,8 @@ const resolvers = {
 };
 
 const server = new ApolloServer({
-    schema: buildFederatedSchema([{ typeDefs, resolvers }])
+    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
 });
-
 
 // The `listen` method launches a web server.
 server.listen(4003).then(({ url }) => {
